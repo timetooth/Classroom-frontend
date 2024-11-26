@@ -14,20 +14,8 @@ const StudentPortal = () => {
     id: 1,
     name: 'Keshav Singla',
     enrolledSubjects: [
-      {
-        id: 1,
-        name: 'Data Structures',
-        instructor: 'Dr. Garvit Gulati',
-        questionsSolved: 15,
-        totalQuestions: 20,
-      },
-      {
-        id: 2,
-        name: 'Algorithms',
-        instructor: 'Dr. Ishita',
-        questionsSolved: 8,
-        totalQuestions: 15,
-      },
+      {id: 1, name: 'Data Structures',instructor: 'Dr. Garvit Gulati',questionsSolved: 15,totalQuestions: 20,},
+      {id: 2, name: 'Algorithms',instructor: 'Dr. Ishita',questionsSolved: 8,totalQuestions: 15,},
     ],
   });
 
@@ -36,57 +24,16 @@ const StudentPortal = () => {
   );
 
   const [assignments] = useState([
-    {
-      id: 1,
-      title: 'Two Sum',
-      leetcodeId: 1,
-      dueDate: '2024-11-20',
-      status: 'completed',
-      description: 'Solve the Two Sum problem using optimal approach',
-    },
-    {
-      id: 2,
-      title: 'Valid Parentheses',
-      leetcodeId: 20,
-      dueDate: '2024-11-25',
-      status: 'pending',
-      description: 'Implement a solution for valid parentheses checking',
-    },
-    {
-      id: 3,
-      title: 'Merge Sort',
-      leetcodeId: 912,
-      dueDate: '2024-11-15',
-      status: 'overdue',
-      description: 'Implement merge sort algorithm',
-    },
+    {id: 1, title: 'Two Sum',leetcodeId: 1,dueDate: '2024-11-20',status: 'completed',description: 'Solve the Two Sum problem using optimal approach',},
+    {id: 2, title: 'Valid Parentheses',leetcodeId: 20,dueDate: '2024-11-25',status: 'pending',description: 'Implement a solution for valid parentheses checking',},
+    {id: 3, title: 'Merge Sort',leetcodeId: 912,dueDate: '2024-11-15',status: 'overdue',description: 'Implement merge sort algorithm',},
   ]);
 
   const [classmates] = useState([
-    {
-      id: 1,
-      name: 'Keshav Singla',
-      questionsSolved: 15,
-      lastActive: '2024-11-15',
-    },
-    {
-      id: 2,
-      name: 'Liza Garg',
-      questionsSolved: 12,
-      lastActive: '2024-11-14',
-    },
-    {
-      id: 3,
-      name: 'Ankit Gupta',
-      questionsSolved: 18,
-      lastActive: '2024-11-16',
-    },
-    {
-      id: 4,
-      name: 'Kay Singh',
-      questionsSolved: 10,
-      lastActive: '2024-11-16',
-    },
+    {id: 1,name: 'Keshav Singla',questionsSolved: 15,lastActive: '2024-11-15',},
+    {id: 2,name: 'Liza Garg',questionsSolved: 12,lastActive: '2024-11-14',},
+    {id: 3, name: 'Ankit Gupta',questionsSolved: 18,lastActive: '2024-11-16',},
+    {id: 4, name: 'Kay Singh',questionsSolved: 10,lastActive: '2024-11-16',},
   ]);
 
   return (

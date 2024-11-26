@@ -9,6 +9,7 @@ import Modal from '../components/Modal';
 import StudentsTable from '../components/StudentsTable';
 import Card from '../components/Card';
 import { BookOpen } from 'lucide-react';
+import CreateClassroomModal from '../components/CreateClassroomModal';
 
 const TeachersPortal = () => {
   const [classes, setClasses] = useState([
@@ -46,9 +47,30 @@ const TeachersPortal = () => {
     dueDate: '',
   });
 
+  const [showCreateClassroomModal, setShowCreateClassroomModal] = useState(false);
+
   const handleClassSelect = useCallback((cls) => {
     setSelectedClass(cls);
   }, []);
+
+  const handleShowCreateClassroomModal = () => {
+    setShowCreateClassroomModal(true);
+  };
+
+  const handleCloseCreateClassroomModal = () => {
+    setShowCreateClassroomModal(false);
+  };
+
+  const handleClassroomCreated = (newClassroom) => {
+    // Ensure newClassroom has students and assignments arrays
+    const newClass = {
+      ...newClassroom,
+      students: newClassroom.students || [],
+      assignments: newClassroom.assignments || [],
+    };
+    setClasses((prevClasses) => [...prevClasses, newClass]);
+    setSelectedClass(newClass);
+  };
 
   const handleShowNewAssignment = useCallback(() => {
     setShowNewAssignment(true);
@@ -78,9 +100,10 @@ const TeachersPortal = () => {
           : null,
         dueDate: newAssignment.dueDate,
       };
+      // Update the selected class's assignments
       setSelectedClass((prevClass) => ({
         ...prevClass,
-        assignments: [...prevClass.assignments, assignmentToAdd],
+        assignments: [...(prevClass.assignments || []), assignmentToAdd],
       }));
       handleCloseModal();
     },
@@ -102,6 +125,12 @@ const TeachersPortal = () => {
             onSelectItem={handleClassSelect}
             itemRenderer={(cls) => cls.name}
           />
+          <button
+            onClick={handleShowCreateClassroomModal}
+            className="w-full p-4 border-2 border-dashed rounded-lg text-gray-500 hover:text-gray-700 hover:border-gray-400 mt-4"
+          >
+            + Create New Classroom
+          </button>
         </div>
 
         {/* Main Content */}
@@ -136,6 +165,13 @@ const TeachersPortal = () => {
         </div>
       </div>
 
+      {/* Create Classroom Modal */}
+      <CreateClassroomModal
+        isOpen={showCreateClassroomModal}
+        onClose={handleCloseCreateClassroomModal}
+        onClassroomCreated={handleClassroomCreated}
+      />
+
       {/* New Assignment Modal */}
       {showNewAssignment && (
         <Modal onClose={handleCloseModal}>
@@ -156,10 +192,7 @@ const TeachersPortal = () => {
               />
             </div>
             <div>
-              <label
-                htmlFor="leetcodeId"
-                className="block text-sm font-medium mb-1"
-              >
+              <label htmlFor="leetcodeId" className="block text-sm font-medium mb-1">
                 LeetCode Problem ID
               </label>
               <input
