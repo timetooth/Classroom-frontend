@@ -43,21 +43,10 @@ const Tab = ({ children }) => children;
 // Status Badge Component
 const StatusBadge = ({ status }) => {
   const statusStyles = {
-    completed: {
-      bg: 'bg-green-100',
-      text: 'text-green-800',
-      icon: Check,
+    completed: {bg: 'bg-green-100', text: 'text-green-800', icon: Check,},
+    pending: {bg: 'bg-yellow-100',text: 'text-yellow-800',icon: Clock,
     },
-    pending: {
-      bg: 'bg-yellow-100',
-      text: 'text-yellow-800',
-      icon: Clock,
-    },
-    overdue: {
-      bg: 'bg-red-100',
-      text: 'text-red-800',
-      icon: AlertCircle,
-    },
+    overdue: {bg: 'bg-red-100',text: 'text-red-800',icon: AlertCircle,},
   };
 
   const style = statusStyles[status];
@@ -76,20 +65,8 @@ const StudentPortal = () => {
     id: 1,
     name: 'Alice Smith',
     enrolledSubjects: [
-      {
-        id: 1,
-        name: 'Data Structures',
-        instructor: 'Dr. Johnson',
-        questionsSolved: 15,
-        totalQuestions: 20
-      },
-      {
-        id: 2,
-        name: 'Algorithms',
-        instructor: 'Prof. Williams',
-        questionsSolved: 8,
-        totalQuestions: 15
-      }
+      {id: 1,name: 'Data Structures',instructor: 'Dr. Johnson',questionsSolved: 15,totalQuestions: 20},
+      {id: 2, name: 'Algorithms', instructor: 'Prof. Williams', questionsSolved: 8,totalQuestions: 15}
     ]
   });
 
@@ -97,28 +74,12 @@ const StudentPortal = () => {
 
   const [assignments] = useState([
     {
-      id: 1,
-      title: 'Two Sum',
-      leetcodeId: 1,
-      dueDate: '2024-11-20',
-      status: 'completed',
-      description: 'Solve the Two Sum problem using optimal approach',
+      id: 1, title: 'Two Sum',leetcodeId: 1,dueDate: '2024-11-20',status: 'completed',description: 'Solve the Two Sum problem using optimal approach',},
+    {
+      id: 2,title: 'Valid Parentheses',leetcodeId: 20,dueDate: '2024-11-25',status: 'pending',description: 'Implement a solution for valid parentheses checking',
     },
     {
-      id: 2,
-      title: 'Valid Parentheses',
-      leetcodeId: 20,
-      dueDate: '2024-11-25',
-      status: 'pending',
-      description: 'Implement a solution for valid parentheses checking',
-    },
-    {
-      id: 3,
-      title: 'Merge Sort',
-      leetcodeId: 912,
-      dueDate: '2024-11-15',
-      status: 'overdue',
-      description: 'Implement merge sort algorithm',
+      id: 3,title: 'Merge Sort',leetcodeId: 912,dueDate: '2024-11-15',status: 'overdue',description: 'Implement merge sort algorithm',
     }
   ]);
 
