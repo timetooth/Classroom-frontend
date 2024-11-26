@@ -1,63 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import { ChevronRight, Award, Users, BookOpen, X } from 'lucide-react';
-
-// Custom Card Component
-const Card = React.memo(({ children, className = '' }) => (
-  <div className={`bg-white rounded-lg shadow-sm border p-4 ${className}`}>
-    {children}
-  </div>
-));
-
-// Custom Tabs Component
-const TabSystem = ({ children, defaultTab }) => {
-  const [activeTab, setActiveTab] = useState(defaultTab);
-
-  const tabs = React.Children.toArray(children).filter(
-    child => child.type === Tab
-  );
-
-  return (
-    <div>
-      <div className="flex border-b mb-4">
-        {tabs.map((tab) => (
-          <button
-            key={tab.props.value}
-            onClick={() => setActiveTab(tab.props.value)}
-            className={`px-4 py-2 -mb-px ${
-              activeTab === tab.props.value
-                ? 'border-b-2 border-blue-500 text-blue-600 font-medium'
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
-          >
-            {tab.props.label}
-          </button>
-        ))}
-      </div>
-      {tabs.find(tab => tab.props.value === activeTab)}
-    </div>
-  );
-};
-
-const Tab = ({ children }) => children;
-
-// Modal Component
-const Modal = React.memo(({ children, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-white rounded-lg p-6 max-w-md w-full relative">
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-      >
-        <X size={20} />
-      </button>
-      {children}
-    </div>
-  </div>
-));
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import TabSystem from '../components/TabSystem';
+import Tab from '../components/Tab';
+import AssignmentList from '../components/AssignmentList';
+import Leaderboard from '../components/Leaderboard';
+import Modal from '../components/Modal';
+import StudentsTable from '../components/StudentsTable';
+import Card from '../components/Card';
+import { BookOpen } from 'lucide-react';
 
 const TeachersPortal = () => {
-  // Sample data - in real app, this would come from an API
-  const [classes] = useState([
+  const [classes, setClasses] = useState([
     {
       id: 1,
       name: 'Data Structures',
@@ -69,7 +23,7 @@ const TeachersPortal = () => {
       assignments: [
         { id: 1, title: 'Two Sum', leetcodeId: 1, dueDate: '2024-11-20' },
         { id: 2, title: 'Valid Parentheses', leetcodeId: 20, dueDate: '2024-11-25' },
-      ]
+      ],
     },
     {
       id: 2,
@@ -80,8 +34,8 @@ const TeachersPortal = () => {
       ],
       assignments: [
         { id: 3, title: 'Merge Sort', leetcodeId: 912, dueDate: '2024-11-22' },
-      ]
-    }
+      ],
+    },
   ]);
 
   const [selectedClass, setSelectedClass] = useState(classes[0]);
@@ -89,10 +43,9 @@ const TeachersPortal = () => {
   const [newAssignment, setNewAssignment] = useState({
     title: '',
     leetcodeId: '',
-    dueDate: ''
+    dueDate: '',
   });
 
-  // Handlers wrapped in useCallback to prevent unnecessary re-renders
   const handleClassSelect = useCallback((cls) => {
     setSelectedClass(cls);
   }, []);
@@ -103,61 +56,52 @@ const TeachersPortal = () => {
 
   const handleCloseModal = useCallback(() => {
     setShowNewAssignment(false);
-    // Optionally reset the form when closing the modal
     setNewAssignment({ title: '', leetcodeId: '', dueDate: '' });
   }, []);
 
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
-    setNewAssignment(prevState => ({
+    setNewAssignment((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   }, []);
 
-  const handleCreateAssignment = useCallback((e) => {
-    e.preventDefault();
-    // Validation can be added here
-    const assignmentToAdd = {
-      id: Date.now(), // Simple unique ID; replace with a proper method in production
-      title: newAssignment.title,
-      leetcodeId: newAssignment.leetcodeId ? Number(newAssignment.leetcodeId) : null,
-      dueDate: newAssignment.dueDate
-    };
-    setSelectedClass(prevClass => ({
-      ...prevClass,
-      assignments: [...prevClass.assignments, assignmentToAdd]
-    }));
-    handleCloseModal();
-  }, [newAssignment, handleCloseModal]);
+  const handleCreateAssignment = useCallback(
+    (e) => {
+      e.preventDefault();
+      const assignmentToAdd = {
+        id: Date.now(),
+        title: newAssignment.title,
+        leetcodeId: newAssignment.leetcodeId
+          ? Number(newAssignment.leetcodeId)
+          : null,
+        dueDate: newAssignment.dueDate,
+      };
+      setSelectedClass((prevClass) => ({
+        ...prevClass,
+        assignments: [...prevClass.assignments, assignmentToAdd],
+      }));
+      handleCloseModal();
+    },
+    [newAssignment, handleCloseModal]
+  );
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Teacher's Portal</h1>
-      
+      <Header title="Teacher's Portal" />
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Classes Sidebar */}
+        {/* Sidebar */}
         <div className="md:col-span-1">
-          <Card>
-            <div className="flex items-center mb-4">
-              <BookOpen className="w-4 h-4 mr-2" />
-              <h2 className="font-semibold">My Classes</h2>
-            </div>
-            <div className="space-y-2">
-              {classes.map(cls => (
-                <button
-                  key={cls.id}
-                  onClick={() => handleClassSelect(cls)}
-                  className={`w-full text-left p-2 rounded flex items-center justify-between ${
-                    selectedClass.id === cls.id ? 'bg-blue-100' : 'hover:bg-gray-100'
-                  }`}
-                >
-                  {cls.name}
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              ))}
-            </div>
-          </Card>
+          <Sidebar
+            title="My Classes"
+            icon={BookOpen}
+            items={classes}
+            selectedItem={selectedClass}
+            onSelectItem={handleClassSelect}
+            itemRenderer={(cls) => cls.name}
+          />
         </div>
 
         {/* Main Content */}
@@ -166,58 +110,20 @@ const TeachersPortal = () => {
             <h2 className="text-xl font-semibold mb-4">{selectedClass.name}</h2>
             <TabSystem defaultTab="students">
               <Tab value="students" label="Students">
-                <div className="rounded-lg border">
-                  <div className="grid grid-cols-4 gap-4 p-4 font-medium border-b bg-gray-50">
-                    <div>Name</div>
-                    <div>Questions Solved</div>
-                    <div>Last Active</div>
-                    <div>Progress</div>
-                  </div>
-                  {selectedClass.students.map(student => (
-                    <div key={student.id} className="grid grid-cols-4 gap-4 p-4 border-b last:border-b-0">
-                      <div>{student.name}</div>
-                      <div>{student.questionsSolved}</div>
-                      <div>{student.lastActive}</div>
-                      <div className="w-full bg-gray-200 rounded-full h-4">
-                        <div 
-                          className="bg-blue-600 h-4 rounded-full transition-all duration-300"
-                          style={{ width: `${(student.questionsSolved / 20) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <StudentsTable students={selectedClass.students} />
               </Tab>
 
               <Tab value="leaderboard" label="Leaderboard">
-                <div className="space-y-4">
-                  {[...selectedClass.students]
-                    .sort((a, b) => b.questionsSolved - a.questionsSolved)
-                    .map((student, index) => (
-                      <div key={student.id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div className="flex items-center">
-                          {index === 0 && <Award className="w-6 h-6 text-yellow-500 mr-2" />}
-                          <span className="font-medium">{student.name}</span>
-                        </div>
-                        <div>{student.questionsSolved} questions</div>
-                      </div>
-                  ))}
-                </div>
+                <Leaderboard classmates={selectedClass.students} />
               </Tab>
 
               <Tab value="assignments" label="Assignments">
                 <div className="space-y-4">
-                  {selectedClass.assignments.map(assignment => (
-                    <Card key={assignment.id} className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-medium">{assignment.title}</h3>
-                        <p className="text-sm text-gray-500">LeetCode #{assignment.leetcodeId}</p>
-                      </div>
-                      <div className="text-sm">Due: {assignment.dueDate}</div>
-                    </Card>
-                  ))}
-                  
-                  <button 
+                  <AssignmentList
+                    assignments={selectedClass.assignments}
+                    showDetails={false}
+                  />
+                  <button
                     onClick={handleShowNewAssignment}
                     className="w-full p-4 border-2 border-dashed rounded-lg text-gray-500 hover:text-gray-700 hover:border-gray-400"
                   >
@@ -236,7 +142,9 @@ const TeachersPortal = () => {
           <h2 className="text-xl font-semibold mb-4">New Assignment</h2>
           <form className="space-y-4" onSubmit={handleCreateAssignment}>
             <div>
-              <label htmlFor="title" className="block text-sm font-medium mb-1">Title</label>
+              <label htmlFor="title" className="block text-sm font-medium mb-1">
+                Title
+              </label>
               <input
                 id="title"
                 name="title"
@@ -248,7 +156,12 @@ const TeachersPortal = () => {
               />
             </div>
             <div>
-              <label htmlFor="leetcodeId" className="block text-sm font-medium mb-1">LeetCode Problem ID</label>
+              <label
+                htmlFor="leetcodeId"
+                className="block text-sm font-medium mb-1"
+              >
+                LeetCode Problem ID
+              </label>
               <input
                 id="leetcodeId"
                 name="leetcodeId"
@@ -261,7 +174,9 @@ const TeachersPortal = () => {
               />
             </div>
             <div>
-              <label htmlFor="dueDate" className="block text-sm font-medium mb-1">Due Date</label>
+              <label htmlFor="dueDate" className="block text-sm font-medium mb-1">
+                Due Date
+              </label>
               <input
                 id="dueDate"
                 name="dueDate"

@@ -52,6 +52,7 @@ const AuthForm = ({
       if (response.ok) {
         if (isLogin) {
           localStorage.setItem('token', data.token); // Store the JWT
+          localStorage.setItem('user_id', data.id); // Store the user ID
   
           // Redirect based on role
           if (data.role === 'student') {
