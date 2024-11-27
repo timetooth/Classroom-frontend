@@ -1,21 +1,21 @@
 import React from "react";
 import Card from "./Card";
 import StatusBadge from "./StatusBadge";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Check } from "lucide-react";
 import { baseUrl } from "../constants";
 
 const AssignmentCard = ({ assignment, showDetails = true }) => {
   const handleCompleteAssignment = async () => {
     try {
-      const response = await fetch(`${baseUrl}/assignment/:id/complete`, {
+      const response = await fetch(`${baseUrl}/assignment/${assignment.id}/complete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            assignmentId: assignment.id,
-            userEmail: localStorage.getItem('userEmail'), // Replace with how you store user email
+          assignmentId: assignment.id,
+          userEmail: localStorage.getItem('userEmail'), // Adjust as needed
         }),
       });
 
@@ -35,7 +35,17 @@ const AssignmentCard = ({ assignment, showDetails = true }) => {
     <Card className="hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-medium">{assignment.title}</h3>
-        {assignment.status && <StatusBadge status={assignment.status} />}
+        <div className="flex items-center">
+          {assignment.status && <StatusBadge status={assignment.status} />}
+          {/* "Question Completed" Button as a Checkmark Icon */}
+          <button
+            onClick={handleCompleteAssignment}
+            className="ml-2 text-green-500 hover:text-green-600"
+            title="Mark as Completed"
+          >
+            <Check className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       {showDetails && assignment.description && (
         <p className="text-sm text-gray-600 mb-2">{assignment.description}</p>
@@ -56,13 +66,6 @@ const AssignmentCard = ({ assignment, showDetails = true }) => {
           </a>
         )}
       </div>
-      {/* "Question Completed" Button */}
-      <button
-        onClick={handleCompleteAssignment}
-        className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-      >
-        Question Completed
-      </button>
     </Card>
   );
 };
