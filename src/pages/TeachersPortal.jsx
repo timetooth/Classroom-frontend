@@ -258,6 +258,7 @@ const TeachersPortal = () => {
                                             selectedClass.assignments
                                         }
                                         showDetails={false}
+                                        isTeacher={true}
                                     />
                                     <button
                                         onClick={handleShowNewAssignment}

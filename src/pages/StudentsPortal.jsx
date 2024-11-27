@@ -52,6 +52,8 @@ const StudentPortal = () => {
         // },
     ]);
 
+    const [completedAssignments, setCompletedAssignments] = useState([]);
+
     const [classmates, setClassmates] = useState([
         // {
         //     id: 1,
@@ -95,6 +97,9 @@ const StudentPortal = () => {
                 );
                 setSelectedSubject(data.classrooms[0] || {});
                 setAssignments(data.classrooms[0].assignments || []);
+                setCompletedAssignments(
+                    data.classrooms[0].completedAssignments || []
+                );
                 setClassmates(data.classrooms[0].students || []);
             })
             .catch((error) => {
@@ -276,7 +281,10 @@ const StudentPortal = () => {
                         </h2>
                         <TabSystem defaultTab="assignments">
                             <Tab value="assignments" label="Assignments">
-                                <AssignmentList assignments={assignments} />
+                                <AssignmentList
+                                    assignments={assignments}
+                                    completedAssignments={completedAssignments}
+                                />
                             </Tab>
                             <Tab value="leaderboard" label="Leaderboard">
                                 <Leaderboard
