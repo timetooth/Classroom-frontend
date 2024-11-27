@@ -3,10 +3,15 @@ import Card from "./Card";
 import StatusBadge from "./StatusBadge";
 import { ExternalLink, Check } from "lucide-react";
 import { baseUrl } from "../constants";
+import { jwtDecode } from "jwt-decode";
+
 
 const AssignmentCard = ({ assignment, showDetails = true }) => {
   const handleCompleteAssignment = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwt_decode(token);
+      const userEmail = decodedToken.email;
       const response = await fetch(`${baseUrl}/assignment/${assignment.id}/complete`, {
         method: 'POST',
         headers: {
@@ -15,7 +20,7 @@ const AssignmentCard = ({ assignment, showDetails = true }) => {
         },
         body: JSON.stringify({
           assignmentId: assignment.id,
-          userEmail: localStorage.getItem('userEmail'), // Adjust as needed
+          userEmail: userEmail,
         }),
       });
 
