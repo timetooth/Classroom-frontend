@@ -3,6 +3,8 @@ import Card from "./Card";
 import StatusBadge from "./StatusBadge";
 import { ExternalLink, Check } from "lucide-react";
 import { baseUrl } from "../constants";
+import { jwtDecode } from "jwt-decode";
+
 
 const AssignmentCard = ({ assignment, isComplete, showDetails = true }) => {
     const handleCompleteAssignment = async () => {
